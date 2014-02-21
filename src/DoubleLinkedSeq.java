@@ -423,7 +423,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	   if(head != null)
 	   {
 		   start();
-		   for(int i = 0; i < element; i++)
+		   for(int i = 1; i < element; i++)
 		   {
 			   advance();
 		   }
