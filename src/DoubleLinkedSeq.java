@@ -411,13 +411,29 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	   
    }
    
-   
+   /**
+    * sets the current element of the sequence
+    * @param element element number of the sequence
+    * 
+    * @postcondition
+    * 	if the sequence is null, no current element will be selected
+    */
    public void setCurrent(int element)
    {
-	   
+	   if(head != null)
+	   {
+		   start();
+		   for(int i = 0; i < element; i++)
+		   {
+			   advance();
+		   }
+	   }
    }
    
-   
+   /**
+    * Overrides the toString() method for the class and prints out the entire 
+    * LinkedList Sequence
+    */
    public String toString()
    {
 	   DoubleNode count;
