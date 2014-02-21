@@ -116,7 +116,10 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      }
    }
    
-   
+   /**
+    * Adds an element to the front of the sequence as the head.
+    * @param element value of the element
+    */
    public void addFront(double element)
    {
 	   if(tail == null)
@@ -339,11 +342,19 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      }
    }
    
-   
-   public void removeFront()
+   /**
+    * Removes the very first element of the sequence of the sequence
+    * 
+    * @throws NullPointerExcpetion
+    * 	this error should only occur if the sequence has no elements.
+    */
+   public void removeFront() throws NullPointerException
    {
-	   head = head.getLink();
-	   manyNodes--;
+	   if(head != null)
+	   {
+		   head = head.getLink();
+	   		manyNodes--;
+	   }
    }
                  
    
@@ -372,10 +383,26 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
       cursor = head;
    }
    
-   
+   /**
+    * finds the value at the requested index
+    * @param element element to be retrieved
+    * 
+    * @return
+    * 	if the Sequence is not null, it returns the element value at the requested
+    * 	index, else it will return 0.0
+    */
    public double getElementAtIndex(int element)
    {
-	   return 0;
+	   if(head != null)
+	   {
+		   start();
+		   for(int i = 0; i < element; i++)
+		   {
+			   advance();
+		   }
+		   return cursor.getData();
+	   }
+	   return 0.0;
    }
    
    
