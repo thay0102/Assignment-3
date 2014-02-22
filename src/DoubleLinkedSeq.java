@@ -62,20 +62,24 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    public void addLast(double element)
    {
 	   DoubleNode add_Last;
-	   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
- 	  {
- 		  if (add_Last.getLink() == null)
- 		  {
- 			  tail = add_Last;
- 			  add_Last = new DoubleNode(element, null);
- 			  tail.setLink(add_Last);
- 			  tail = add_Last;
-
- 			  manyNodes++;
- 			  break;
- 		  }
- 		  continue;
- 	  }
+	   if(head == null){
+		   head = new DoubleNode(element, head);
+		   manyNodes++;
+	   }
+	   else
+	   {
+		   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
+		   {
+			   if (add_Last.getLink() == null)
+			   {
+				   tail = add_Last;
+				   add_Last = new DoubleNode(element, null);
+				   tail.setLink(add_Last);
+				   tail = add_Last;
+				   manyNodes++;
+			   }
+		   }
+	   }
    }
 
 
