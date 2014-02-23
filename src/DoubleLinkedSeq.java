@@ -62,23 +62,24 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    public void addLast(double element)
    {
 	   DoubleNode add_Last;
-	   if(head == null){
-		   head = new DoubleNode(element, head);
-		   manyNodes++;
-	   }
-	   else
+	   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
+ 	  {
+ 		  if (add_Last.getLink() == null)
+ 		  {
+ 			  tail = add_Last;
+ 			  add_Last = new DoubleNode(element, null);
+ 			  tail.setLink(add_Last);
+ 			  tail = add_Last;
+
+ 			  manyNodes++;
+ 			  break;
+ 		  }
+ 		  continue;
+ 	  }
+	   if (head == tail)
 	   {
-		   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
-		   {
-			   if (add_Last.getLink() == null)
-			   {
-				   tail = add_Last;
-				   add_Last = new DoubleNode(element, null);
-				   tail.setLink(add_Last);
-				   tail = add_Last;
-				   manyNodes++;
-			   }
-		   }
+			  head = new DoubleNode(element, null);
+			  manyNodes++;
 	   }
    }
 
@@ -116,14 +117,12 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      else
 	      {
 	    	  head = new DoubleNode(element, head);
+	    	  cursor = head;
 	    	  manyNodes++;
 	      }
    }
    
-   /**
-    * Adds an element to the front of the sequence as the head.
-    * @param element value of the element
-    */
+   
    public void addFront(double element)
    {
 	   if(tail == null)
@@ -158,6 +157,8 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    **/
    public void addAll(DoubleLinkedSeq addend)
    {
+	   DoubleNode temp = addend.cursor;
+	   
 	   try
 	   {
 		   for(addend.start(); addend.isCurrent(); addend.advance())
@@ -169,6 +170,10 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	   catch(NullPointerException npe)
 	   {
 		   System.out.println("The sequence being added is null.");
+	   }
+	   finally 
+	   {
+		   addend.cursor = temp;
 	   }
 	   if(size() >= Integer.MAX_VALUE)
 	   {
@@ -346,19 +351,11 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      }
    }
    
-   /**
-    * Removes the very first element of the sequence of the sequence
-    * 
-    * @throws NullPointerExcpetion
-    * 	this error should only occur if the sequence has no elements.
-    */
-   public void removeFront() throws NullPointerException
+   
+   public void removeFront()
    {
-	   if(head != null)
-	   {
-		   head = head.getLink();
-	   		manyNodes--;
-	   }
+	   head = head.getLink();
+	   manyNodes--;
    }
                  
    
@@ -387,26 +384,22 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
       cursor = head;
    }
    
-   /**
-    * finds the value at the requested index
-    * @param element element to be retrieved
-    * 
-    * @return
-    * 	if the Sequence is not null, it returns the element value at the requested
-    * 	index, else it will return 0.0
-    */
-   public double getElementAtIndex(int element)
+   
+   public double getElementAtIndex(int index) throws IndexOutOfBoundsException
    {
-	   if(head != null)
-	   {
-		   start();
-		   for(int i = 0; i < element; i++)
-		   {
-			   advance();
-		   }
-		   return cursor.getData();
-	   }
-	   return 0.0;
+    double valueAtIndex =0;
+    DoubleNode temp = cursor;
+    
+    start();
+    for(int i = 1; i < index; i++)
+    {
+     advance();
+    }
+    
+    valueAtIndex = cursor.getData();
+    cursor = temp;
+    
+    return valueAtIndex;
    }
    
    
@@ -415,29 +408,13 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	   
    }
    
-   /**
-    * sets the current element of the sequence
-    * @param element element number of the sequence
-    * 
-    * @postcondition
-    * 	if the sequence is null, no current element will be selected
-    */
+   
    public void setCurrent(int element)
    {
-	   if(head != null)
-	   {
-		   start();
-		   for(int i = 1; i < element; i++)
-		   {
-			   advance();
-		   }
-	   }
+	   
    }
    
-   /**
-    * Overrides the toString() method for the class and prints out the entire 
-    * LinkedList Sequence
-    */
+   
    public String toString()
    {
 	   DoubleNode count;
