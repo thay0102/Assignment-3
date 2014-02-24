@@ -217,7 +217,18 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    public Object clone( )
    {  // Clone a DoubleLinkedSeq object.
       // Student will replace this return statement with their own code:
-      return null;
+	   DoubleLinkedSeq clone = new DoubleLinkedSeq();
+	  try
+	  {
+		  
+		  clone.addAll(this);
+	  }
+	  catch(OutOfMemoryError error)
+	  {
+		  error.printStackTrace();
+	  }
+	  
+      return clone;
    }
    
 
