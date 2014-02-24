@@ -16,7 +16,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    public DoubleLinkedSeq( )
    {
       head = null;
-      tail = head;
+      tail = null;
       cursor = null;
       precursor = null;
       manyNodes = 0;
@@ -52,7 +52,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
       else
       {
     	  precursor = tail;
-    	  tail = new DoubleNode(element, null);
+    	  tail = new DoubleNode(element, tail);
     	  precursor.setLink(tail);
     	  manyNodes++;
       }
@@ -62,26 +62,26 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    public void addLast(double element)
    {
 	   DoubleNode add_Last;
-	   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
- 	  {
- 		  if (add_Last.getLink() == null)
- 		  {
- 			  tail = add_Last;
- 			  add_Last = new DoubleNode(element, null);
- 			  tail.setLink(add_Last);
- 			  tail = add_Last;
-
- 			  manyNodes++;
- 			  break;
- 		  }
- 		  continue;
- 	  }
-	   if (head == tail)
-	   {
-			  head = new DoubleNode(element, null);
-			  manyNodes++;
+	   if(head == null){
+		   head = new DoubleNode(element, head);
+		   manyNodes++;
 	   }
-   }
+	   else
+	   {
+		   for(add_Last = head; add_Last != null; add_Last = add_Last.getLink())
+		   {
+			   if (add_Last.getLink() == null)
+			   {
+				   tail = add_Last;
+				   add_Last = new DoubleNode(element, null);
+				   tail.setLink(add_Last);
+				   tail = add_Last;
+				   manyNodes++;
+			   }
+		   }
+	   }
+ 	}
+   
 
 
    /**
@@ -117,7 +117,6 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      else
 	      {
 	    	  head = new DoubleNode(element, head);
-	    	  cursor = head;
 	    	  manyNodes++;
 	      }
    }
@@ -157,8 +156,6 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    **/
    public void addAll(DoubleLinkedSeq addend)
    {
-	   DoubleNode temp = addend.cursor;
-	   
 	   try
 	   {
 		   for(addend.start(); addend.isCurrent(); addend.advance())
@@ -169,11 +166,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	   }
 	   catch(NullPointerException npe)
 	   {
-		   System.out.println("The sequence being added is null.");
-	   }
-	   finally 
-	   {
-		   addend.cursor = temp;
+		   throw new NullPointerException();
 	   }
 	   if(size() >= Integer.MAX_VALUE)
 	   {
@@ -298,7 +291,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
       }
       if(isCurrent() == false)
       {
-    	  throw new IllegalStateException();
+    	  throw new IllegalStateException("There is no current");
       }
       return 0;
    }
@@ -347,7 +340,7 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
 	      }
 	   if(isCurrent() == false)
 	      {
-	    	  throw new IllegalStateException();
+	    	  throw new IllegalStateException("There is no current");
 	      }
    }
    
@@ -385,33 +378,38 @@ public class DoubleLinkedSeq extends DoubleNode implements Cloneable
    }
    
    
-   public double getElementAtIndex(int index) throws IndexOutOfBoundsException
+   public double getElementAtIndex(int element)
    {
-    double valueAtIndex =0;
-    DoubleNode temp = cursor;
-    
-    start();
-    for(int i = 1; i < index; i++)
-    {
-     advance();
-    }
-    
-    valueAtIndex = cursor.getData();
-    cursor = temp;
-    
-    return valueAtIndex;
+	  int count = 1;
+	  DoubleNode findData;
+	  for(findData = head; findData!= null; findData = findData.getLink())
+	  {
+		  if(count == element)
+		  {
+			  return findData.getData();
+		  }
+		  count++;
+	  }
+	  return 0.0;
    }
    
    
    public void end()
    {
-	   
+	   cursor = tail;
    }
    
    
    public void setCurrent(int element)
    {
-	   
+	   if(head != null)
+	   {
+		   start();
+		   for(int i = 1; i < element; i++)
+		   {
+			   advance();
+		   }
+	   }
    }
    
    
